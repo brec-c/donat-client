@@ -2,16 +2,20 @@
   "name": "donat-client",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://oldswolfwalkathon.com/donate",
   "devDependencies": {
     "react-scripts": "0.4.3"
   },
   "dependencies": {
+    "material-ui": "^0.15.4",
     "react": "^15.3.1",
-    "react-dom": "^15.3.1"
+    "react-dom": "^15.3.1",
+    "react-router": "^2.8.1",
+    "react-tap-event-plugin": "^1.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && cp -r ./build/* ../donat/public/donate",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
