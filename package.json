@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "http://oldswolfwalkathon.com/donate",
+  "proxy": "http://dev.donat.app:3030",
   "devDependencies": {
     "react-scripts": "0.4.3"
   },
