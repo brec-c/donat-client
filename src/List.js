@@ -6,10 +6,9 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd           from 'material-ui/svg-icons/content/add';
 
 import {List, ListItem} from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import {grey400} from 'material-ui/styles/colors';
+import {grey400, greenA400} from 'material-ui/styles/colors';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import FontIcon from 'material-ui/FontIcon';
@@ -21,7 +20,8 @@ import store from 'store';
 const paperStyle = {
   maxHeight: 800,
   width: 800,
-  margin: 20,
+  marginTop: 100,
+  textAlign: 'left',
   padding: 40,
   overflow: 'auto',
   display: 'inline-block'
@@ -36,13 +36,6 @@ const iconButtonElement = (
     <MoreVertIcon color={grey400} />
   </IconButton>
 );
-
-// const rightIconMenu = (
-//   <IconMenu iconButtonElement={iconButtonElement}>
-//     <MenuItem onTouchTap={function(){console.log("test1");}} value={d.key}>Edit</MenuItem>
-//     <MenuItem value={d.key}>Delete</MenuItem>
-//   </IconMenu>
-// );
 
 class DonationList extends Component {
     constructor(props, context) {
@@ -63,33 +56,75 @@ class DonationList extends Component {
         console.log("implement delete for "+value);
     }
 
-    onToken = (token) => {
-        fetch('/charge', {
+    onPaymentStarted = () => {
+        var _this = this;
+        const request = new Request('/donations', {
             method: 'POST',
-            body: JSON.stringify(token)
-        }).then(token => {
-            alert(`We are in business, ${token.email}`);
+            body: JSON.stringify(this.state),
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            })
+        });
+        fetch(request).then(response => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            response.text().then(donationId => {
+                _this.setState({
+                    donationId: donationId
+                });
+            });
+        }).catch(err=>{
+            console.log("bundle failed to save: "+err);
+        });
+    }
 
-            // if successful, clear donationBundle
+    getTotalAmount = () => {
+        return this.state
+            .donations.reduce(function(total, val){
+                return total + val.amount;
+            }, 0);
+    }
+
+    onToken = (token) => {
+        // we also need to pass up the amount
+        // const total = getTotalAmount();
+        token.donationId = this.state.donationId;
+
+        const request = new Request('/charge', {
+            method: 'POST',
+            body: JSON.stringify(token),
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            })
+        });
+        fetch(request).then(response => {
+            if (!response.ok) {
+                alert("Error paying: "+response.statusText);
+                throw Error(response.statusText);
+            }
         });
     }
 
     render() {
         const rows = this.state.donations;
-        const total = rows.reduce(function(total, val){ return total + val.amount; }, 0);
+        const total = this.getTotalAmount();
         const _this = this;
+        const centeralign = {textAlign: 'center'};
         return (
             <div>
+            <div style={centeralign}>
                 <Paper style={paperStyle} zDepth={3}>
-                    <h1>Total ${total}</h1>
-                    <FloatingActionButton href="/donate/add">
+                    <h1>Donations Total ${total}</h1>
+                    <FloatingActionButton href="/donate/add"
+                        backgroundColor={greenA400}>
                         <ContentAdd />
                     </FloatingActionButton>
                     <List>
-                        <Subheader>Donations</Subheader>
                         {rows.map(function(d){
                             return <ListItem
                                 key={d.key}
+                                disabled={true}
                                 leftIcon={<FontIcon className="material-icons">
                                     {d.studentName ? 'face' : 'school'}
                                 </FontIcon>}
@@ -97,19 +132,30 @@ class DonationList extends Component {
                                   <MenuItem onTouchTap={function(){_this.onEdit(d.key)}}>Edit</MenuItem>
                                   <MenuItem onTouchTap={function(){_this.onDelete(d.key)}}>Delete</MenuItem>
                                 </IconMenu>}
-                                primaryText={d.amount}
+                                primaryText={'$'+d.amount}
                                 secondaryText={<p>Testing out this</p>}
-                                secondaryTextLines={2}
+                                secondaryTextLines={1}
                             />;
                         })}
                     </List>
                 </Paper>
+            </div>
 
                 <StripeCheckout
+                    name="Fred A. Olds Elementary"
+                    description="Wolf Walkathon Fundraiser"
+                    panelLabel="Pay"
+                    currency="USD"
+                    amount={total*100}
                     token={this.onToken}
                     stripeKey="pk_test_LfX4pdpuTU5cBcy35taA7f0D"
+                    triggerEvent="onTouchTap"
                 >
-                    <RaisedButton label="Pay Now" secondary={true}/>
+                    <RaisedButton
+                        label="Pay Now"
+                        secondary={true}
+                        onTouchTap={this.onPaymentStarted}
+                    />
                 </StripeCheckout>
             </div>
         );

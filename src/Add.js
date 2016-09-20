@@ -9,10 +9,13 @@ import RaisedButton from 'material-ui/RaisedButton';
 import store from 'store';
 import uuid from 'uuid';
 
+import './Add.css';
+
 const paperStyle = {
   height: 500,
   width: 800,
-  margin: 20,
+  marginTop: 100,
+  textAlign: 'left',
   padding: 40,
   display: 'inline-block',
 };
@@ -74,43 +77,48 @@ class AddDonation extends Component {
 
     render() {
         const isDisabled = !this.state.amount;
+        const centeralign = {textAlign: 'center'};
         return (
-            <Paper style={paperStyle} zDepth={3}>
-                <h1>Donate</h1>
-                <TextField
-                      hintText="$"
-                      fullWidth={true}
-                      type="number"
-                      name="amount"
-                      value={this.state.amount}
-                      onChange={this.onAmountChange}
-                      floatingLabelText="Amount to Donate"
-                    />
-                <TextField
-                      hintText="Who gets the credit?"
+            <div style={centeralign}>
+                <Paper style={paperStyle} zDepth={3}>
+                    <h1>Donate</h1>
+                    <TextField
+                          hintText="$"
+                          fullWidth={true}
+                          type="number"
+                          name="amount"
+                          value={this.state.amount}
+                          onChange={this.onAmountChange}
+                          floatingLabelText="Amount to Donate"
+                        />
+                    <TextField
+                          hintText="Who gets the credit?"
+                          type="text"
+                          fullWidth={true}
+                          value={this.state.studentName}
+                          onChange={this.onStudentChange}
+                          floatingLabelText="Student's Name (optional)"
+                        />
+                        <br/>
+                    <TextField
+                      hintText="What do you want to shout?"
+                      floatingLabelText="Shout out (optional)"
                       type="text"
+                      multiLine={true}
+                      rows={2}
                       fullWidth={true}
-                      value={this.state.studentName}
-                      onChange={this.onStudentChange}
-                      floatingLabelText="Student's Name (optional)"
+                      value={this.state.shoutOut}
+                      onChange={this.onShoutOutChange}
                     />
-                    <br/>
-                <TextField
-                  hintText="What do you want to shout?"
-                  floatingLabelText="Shout out (optional)"
-                  type="text"
-                  multiLine={true}
-                  rows={2}
-                  fullWidth={true}
-                  value={this.state.shoutOut}
-                  onChange={this.onShoutOutChange}
-                />
-                <RaisedButton
-                    label="Add Donation"
-                    onTouchTap={this.onAddClick}
-                    disabled={isDisabled}
-                />
-            </Paper>
+                    <div className="addfooter">
+                        <RaisedButton
+                            label="Add Donation"
+                            onTouchTap={this.onAddClick}
+                            disabled={isDisabled}
+                        />
+                    </div>
+                </Paper>
+            </div>
         );
     }
 }
