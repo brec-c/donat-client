@@ -10,26 +10,20 @@ import AddDonation  from './Add'
 
 class App extends Component {
 
-    barStyle: {
-        'background-color': '#9C27B0'
-    };
-
     render(){
         return (
             <div>
                 <AppBar
                     title='Wolf Walkathon'
                     showMenuIconButton={false}
-                    style={this.barStyle}
                 />
-
                 <Router history={browserHistory}>
-                    {/* Want this to redirect to Add instead of list */}
                     <Route path='/' component={AddDonation}>
-                        <Redirect from='/' to='/add' />
+                        <Redirect from='/' to='/donate/add' />
+                        <Redirect from='/donate' to='/donate/add' />
                     </Route>
-                    <Route path='/list' component={DonationList} />
-                    <Route path='/add' component={AddDonation} />
+                    <Route path='/donate/list' component={DonationList} />
+                    <Route path='/donate/add' component={AddDonation} />
                 </Router>
             </div>
         );
