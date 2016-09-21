@@ -24,7 +24,7 @@ const paperStyle = {
   width: 800,
   marginTop: 100,
   textAlign: 'left',
-  padding: 40,
+  padding: '20px 40px',
   overflow: 'auto',
   display: 'inline-block'
 };
@@ -43,8 +43,6 @@ class DonationList extends Component {
     constructor(props, context) {
         super(props, context);
 
-        // this.handleTouchTap = this.handleTouchTap.bind(this);
-
         this.state = store.get('donationBundle') || {donations: []};
 
         this.onEdit = this.onEdit.bind(this);
@@ -54,8 +52,14 @@ class DonationList extends Component {
         console.log("implement edit for "+value);
     }
 
-    onDelete = (value) => {
-        console.log("implement delete for "+value);
+    onDelete = (donationId) => {
+      const dlist = this.state.donations.filter( d => {
+        return d.key !== donationId;
+      });
+        this.setState({
+          donations: dlist
+        });
+        store.set('donationBundle', {donations: dlist});
     }
 
     onPaymentStarted = () => {
@@ -76,7 +80,7 @@ class DonationList extends Component {
                     donationId: donationId
                 });
             });
-        }).catch(err=>{
+        }).catch(err => {
             console.log("bundle failed to save: "+err);
         });
     }
@@ -89,23 +93,39 @@ class DonationList extends Component {
     }
 
     onToken = (token) => {
-        // we also need to pass up the amount
-        // const total = getTotalAmount();
-        token.donationId = this.state.donationId;
+        const _this = this;
+
+        const charge = {
+            amount: this.getTotalAmount() * 100,
+            donationId: this.state.donationId,
+            stripeToken: token
+        };
 
         const request = new Request('/charge', {
             method: 'POST',
-            body: JSON.stringify(token),
+            body: JSON.stringify(charge),
             headers: new Headers({
                 'Content-Type': 'application/json'
             })
         });
-        fetch(request).then(response => {
-            if (!response.ok) {
-                alert("Error paying: "+response.statusText);
-                throw Error(response.statusText);
-            }
-        });
+        fetch(request)
+            .then(response => {
+                debugger;
+                if (!response.ok) {
+                    alert("Error paying: "+response.statusText);
+                    throw Error(response.statusText);
+                }
+
+                // go to success page?
+                alert("Paid!  Thank you!");
+                _this.setState({donations:[]});
+                store.remove('donationBundle');
+
+                return response;
+            })
+            .catch(err => {
+                console.error(err);
+            })
     }
 
     render() {
@@ -116,9 +136,11 @@ class DonationList extends Component {
         return (
             <div>
             <div style={centeralign}>
-                <Paper style={paperStyle} zDepth={3}>
-                    <h1>Donations Total ${total}</h1>
-                    <FloatingActionButton href="/donate/add"
+                <Paper style={paperStyle} zDepth={3} className="listPaper">
+                    <h1>Donations</h1>
+                    <FloatingActionButton
+                      className="addButton"
+                      href="/donate/add"
                         backgroundColor={greenA400}>
                         <ContentAdd />
                     </FloatingActionButton>
@@ -142,24 +164,28 @@ class DonationList extends Component {
                     </List>
                 </Paper>
             </div>
-            <div className="payNowFooter">
-                <StripeCheckout
-                    name="Fred A. Olds Elementary"
-                    description="Wolf Walkathon Fundraiser"
-                    panelLabel="Pay"
-                    currency="USD"
-                    amount={total*100}
-                    token={this.onToken}
-                    stripeKey="pk_test_LfX4pdpuTU5cBcy35taA7f0D"
-                    triggerEvent="onTouchTap"
-                >
-                    <RaisedButton
-                        label="Pay Now"
-                        secondary={true}
-                        onTouchTap={this.onPaymentStarted}
-                    />
-                </StripeCheckout>
-            </div>
+              <div className="payNowFooter">
+                { /* put total here too? */ }
+                { rows.length > 0 ?
+
+                  <StripeCheckout
+                      name="Fred A. Olds Elementary"
+                      description="Wolf Walkathon Fundraiser"
+                      panelLabel="Pay"
+                      currency="USD"
+                      amount={total*100}
+                      token={this.onToken}
+                      stripeKey="pk_test_LfX4pdpuTU5cBcy35taA7f0D"
+                      triggerEvent="onTouchTap"
+                  >
+                      <RaisedButton
+                          label="Pay Now"
+                          secondary={true}
+                          onTouchTap={this.onPaymentStarted}
+                      />
+                  </StripeCheckout>
+                  : null }
+              </div>
             </div>
         );
     }

@@ -78,11 +78,13 @@ class AddDonation extends Component {
         const isDisabled = !this.state.amount;
         const centeralign = {textAlign: 'center'};
 
+        const amount = this.state.amount; // TODO: process this into $xxx.xx
+
         return (
             <div>
                 <div style={breadcrumbStyle}>
                     <FlatButton
-                        label="View Donation List"
+                        label="List all donations"
                         className=""
                         href="/donate/list"
                         secondary={true}
@@ -98,14 +100,14 @@ class AddDonation extends Component {
                     <TextField
                           hintText="$"
                           fullWidth={true}
-                          type="number"
+                          type="text"
                           name="amount"
-                          value={this.state.amount}
+                          value={amount}
                           onChange={this.onAmountChange}
                           floatingLabelText="Amount to Donate"
                         />
                     <TextField
-                          hintText="Who gets the credit?"
+                          hintText="Full or Nick name"
                           type="text"
                           fullWidth={true}
                           value={this.state.studentName}
@@ -114,7 +116,7 @@ class AddDonation extends Component {
                         />
                         <br/>
                     <TextField
-                      hintText="What do you want to shout?"
+                      hintText="What do you want to be shouted during the run?"
                       floatingLabelText="Shout out (optional)"
                       type="text"
                       multiLine={true}

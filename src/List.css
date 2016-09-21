@@ -1,4 +1,17 @@
 .payNowFooter {
     text-align: center;
-    margin-top: -22px;
+    margin-top: 30px;
+}
+
+.listPaper {
+  position: relative;
+}
+.listPaper h1 {
+  margin-top: 0;
+}
+
+.addButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
