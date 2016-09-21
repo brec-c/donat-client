@@ -5,6 +5,8 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 // import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
+import FontIcon from 'material-ui/FontIcon';
 
 import store from 'store';
 import uuid from 'uuid';
@@ -14,22 +16,25 @@ import './Add.css';
 const paperStyle = {
   height: 500,
   width: 800,
-  marginTop: 100,
+  marginTop: 10,
   textAlign: 'left',
   padding: 40,
   display: 'inline-block',
 };
+
+const breadcrumbStyle = {
+    width: 800,
+    margin: '80px auto 0'
+};
+
 
 class AddDonation extends Component {
 
     constructor(props, context) {
         super(props, context);
 
-        // this.handleTouchTap = this.handleTouchTap.bind(this);
+        this.donationBundle = store.get('donationBundle') || { donations: [] };
 
-        // this.data = store.get('donationBundle') || {
-        //
-        // };
         this.state = {
             amount: '',
             studentName: '',
@@ -69,19 +74,27 @@ class AddDonation extends Component {
         browserHistory.push('/donate/list');
     }
 
-/*
-<FontIcon className="material-icons">
-    attach_money
-</FontIcon>
-*/
-
     render() {
         const isDisabled = !this.state.amount;
         const centeralign = {textAlign: 'center'};
+
         return (
+            <div>
+                <div style={breadcrumbStyle}>
+                    <FlatButton
+                        label="View Donation List"
+                        className=""
+                        href="/donate/list"
+                        secondary={true}
+                        icon={<FontIcon className='material-icons'>
+                            arrow_back
+                        </FontIcon>}
+                    />
+                </div>
             <div style={centeralign}>
+
                 <Paper style={paperStyle} zDepth={3}>
-                    <h1>Donate</h1>
+                    <h1>Add a Donation</h1>
                     <TextField
                           hintText="$"
                           fullWidth={true}
@@ -119,6 +132,7 @@ class AddDonation extends Component {
                     </div>
                 </Paper>
             </div>
+        </div>
         );
     }
 }

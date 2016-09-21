@@ -17,6 +17,8 @@ import StripeCheckout from 'react-stripe-checkout';
 
 import store from 'store';
 
+import './List.css';
+
 const paperStyle = {
   maxHeight: 800,
   width: 800,
@@ -140,7 +142,7 @@ class DonationList extends Component {
                     </List>
                 </Paper>
             </div>
-
+            <div className="payNowFooter">
                 <StripeCheckout
                     name="Fred A. Olds Elementary"
                     description="Wolf Walkathon Fundraiser"
@@ -157,6 +159,7 @@ class DonationList extends Component {
                         onTouchTap={this.onPaymentStarted}
                     />
                 </StripeCheckout>
+            </div>
             </div>
         );
     }
