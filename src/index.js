@@ -5,7 +5,7 @@ import './index.css';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import {purple500} from 'material-ui/styles/colors'
+// import {purple500} from 'material-ui/styles/colors'
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
@@ -15,7 +15,8 @@ injectTapEventPlugin();
 
 const muiTheme = getMuiTheme({
     appBar: {
-        color: purple500,
+        color: "transparent",
+        boxShadow: "none",
         height: 50
     }
 });

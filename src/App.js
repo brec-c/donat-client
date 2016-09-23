@@ -7,6 +7,7 @@ import './App.css';
 
 import DonationList from './List';
 import AddDonation  from './Add'
+import EditDonation from './Edit'
 
 class App extends Component {
 
@@ -16,8 +17,10 @@ class App extends Component {
   //
     render(){
         return (
-            <div>
+            <div className="App">
                 <AppBar
+                  className="app-bar"
+                  style={{boxShadow: "none"}}
                     title='Wolf Walkathon'
                     showMenuIconButton={false}
                 />
@@ -28,6 +31,7 @@ class App extends Component {
                     </Route>
                     <Route path='/donate/list' component={DonationList} />
                     <Route path='/donate/add' component={AddDonation} />
+                    <Route path='/donate/edit/:id' component={EditDonation} />
                 </Router>
             </div>
         );

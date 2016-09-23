@@ -3,7 +3,6 @@ import {browserHistory} from 'react-router';
 
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
-// import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -26,7 +25,6 @@ const breadcrumbStyle = {
     width: 800,
     margin: '80px auto 0'
 };
-
 
 class AddDonation extends Component {
 

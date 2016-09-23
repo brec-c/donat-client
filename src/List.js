@@ -32,8 +32,8 @@ const paperStyle = {
 const iconButtonElement = (
   <IconButton
     touch={true}
-    tooltip="more options"
-    tooltipPosition="bottom-left"
+    // tooltip="more options"
+    // tooltipPosition="bottom-left"
   >
     <MoreVertIcon color={grey400} />
   </IconButton>
@@ -156,12 +156,15 @@ class DonationList extends Component {
                                   <MenuItem onTouchTap={function(){_this.onEdit(d.key)}}>Edit</MenuItem>
                                   <MenuItem onTouchTap={function(){_this.onDelete(d.key)}}>Delete</MenuItem>
                                 </IconMenu>}
-                                primaryText={'$'+d.amount}
-                                secondaryText={<p>Testing out this</p>}
+                                primaryText={'$'+d.amount+' for '+ (d.studentName || 'Olds Elementary')}
+                                secondaryText={d.shoutOut}
                                 secondaryTextLines={1}
                             />;
                         })}
                     </List>
+                    <div className="total-summary">
+                      <span>Total:</span>&nbsp;<b>${total}</b>
+                    </div>
                 </Paper>
             </div>
               <div className="payNowFooter">
