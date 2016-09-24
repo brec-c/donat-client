@@ -1,0 +1,11 @@
+.addfooter {
+  margin-top: 60px;
+  text-align: center;
+}
+.backButton {
+  color: white !important;
+}
+
+.backButton .material-icons {
+  color: white !important;
+}

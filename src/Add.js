@@ -72,68 +72,7 @@ class AddDonation extends Component {
         browserHistory.push('/donate/list');
     }
 
-    render() {
-        const isDisabled = !this.state.amount;
-        const centeralign = {textAlign: 'center'};
 
-        const amount = this.state.amount; // TODO: process this into $xxx.xx
-
-        return (
-            <div>
-                <div style={breadcrumbStyle}>
-                    <FlatButton
-                        label="List all donations"
-                        className=""
-                        href="/donate/list"
-                        secondary={true}
-                        icon={<FontIcon className='material-icons'>
-                            arrow_back
-                        </FontIcon>}
-                    />
-                </div>
-            <div style={centeralign}>
-
-                <Paper style={paperStyle} zDepth={3}>
-                    <h1>Add a Donation</h1>
-                    <TextField
-                          hintText="$"
-                          fullWidth={true}
-                          type="text"
-                          name="amount"
-                          value={amount}
-                          onChange={this.onAmountChange}
-                          floatingLabelText="Amount to Donate"
-                        />
-                    <TextField
-                          hintText="Full or Nick name"
-                          type="text"
-                          fullWidth={true}
-                          value={this.state.studentName}
-                          onChange={this.onStudentChange}
-                          floatingLabelText="Student's Name (optional)"
-                        />
-                        <br/>
-                    <TextField
-                      hintText="What do you want to be shouted during the run?"
-                      floatingLabelText="Shout out (optional)"
-                      type="text"
-                      multiLine={true}
-                      rows={2}
-                      fullWidth={true}
-                      value={this.state.shoutOut}
-                      onChange={this.onShoutOutChange}
-                    />
-                    <div className="addfooter">
-                        <RaisedButton
-                            label="Add Donation"
-                            onTouchTap={this.onAddClick}
-                            disabled={isDisabled}
-                        />
-                    </div>
-                </Paper>
-            </div>
-        </div>
-        );
     }
 }
 

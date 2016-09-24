@@ -1,6 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import { browserHistory, Router, IndexRoute, Route } from 'react-router';
+
 import App from './App';
+import DonationList from './List';
+import DonationForm from './DonationForm';
+
+// TODO:
+// - add success route
+
 import './index.css';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -14,16 +23,23 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 const muiTheme = getMuiTheme({
-    appBar: {
-        color: "transparent",
-        boxShadow: "none",
-        height: 50
-    }
+  appBar: {
+    color: "transparent",
+    boxShadow: "none",
+    height: 50
+  }
 });
 
 ReactDOM.render(
-    <MuiThemeProvider muiTheme={muiTheme}>
-        <App />
-    </MuiThemeProvider>,
+  <MuiThemeProvider muiTheme={muiTheme}>
+    <Router history={browserHistory}>
+      <Route path='/donate'    component={App}>
+        <IndexRoute            component={DonationList} />
+        <Route path='list'     component={DonationList} />
+        <Route path='add'      component={DonationForm} />
+        <Route path='edit/:key' component={DonationForm} />
+      </Route>
+    </Router>
+  </MuiThemeProvider>,
   document.getElementById('root')
 );
