@@ -6,13 +6,19 @@ import './App.css';
 
 class App extends Component {
   render(){
+    const styles = {
+      title: {
+        cursor: 'pointer',
+      },
+    };
     return (
       <div className="App">
         <AppBar
           className="app-bar"
+          title={<span style={styles.title}>Wolf Walk-a-thon</span>}
           style={{boxShadow: "none"}}
-          title='Wolf Walkathon'
           showMenuIconButton={false}
+          onTitleTouchTap={() => {window.location="/"}}
         />
 
         {this.props.children}

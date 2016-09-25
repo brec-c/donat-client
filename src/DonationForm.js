@@ -80,7 +80,7 @@ class DonationForm extends Component {
   }
 
   render() {
-    const isDisabled = !this.state.amount || this.state.amount === 0;
+    const isDisabled = !this.state.amount || Number(this.state.amount) === 0;
     const centeralign = {textAlign: 'center'};
 
     const amount = this.state.amount; // TODO: process this into $xxx.xx
