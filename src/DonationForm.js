@@ -7,8 +7,9 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 
-import store from 'store';
-import uuid from 'uuid';
+// import store from 'store';
+// import uuid from 'uuid';
+import DonationBundle from './DonationBundle';
 
 import AmountField from './AmountField';
 
@@ -23,11 +24,6 @@ const paperStyle = {
   display: 'inline-block',
 };
 
-const breadcrumbStyle = {
-  width: 800,
-  margin: '80px auto 0'
-};
-
 class DonationForm extends Component {
   constructor(props, context) {
     super(props, context);
@@ -35,23 +31,30 @@ class DonationForm extends Component {
     // look for a id in the props? or from the router?
     var key = props.params.key;
 
-    this.donationBundle = store.get('donationBundle') || { donations: [] };
+    this.bundle = new DonationBundle();
+    this.state = this.bundle.getDonation(key) || this.bundle.createDonation();
 
-    // if id is here, load the state from tht donation
-    if (!key) {
-      this.state = {
-        amount: '',
-        studentName: '',
-        shoutOut: '',
-        key: uuid.v1()
-      };
-    } else {
-      var donation = this.donationBundle.donations.find((d) => {
-        return d.key === key;
-      })
-      this.state = donation;
-    }
+    // this.donationBundle = store.get('donationBundle') || { donations: {} };
+    //
+    // // if id is here, load the state from tht donation
+    // if (!key) {
+    //   this.state = {
+    //     amount: '',
+    //     studentName: '',
+    //     shoutOut: '',
+    //     key: uuid.v1()
+    //   };
+    // } else {
+    //   var donation = this.findDonationByKey(key);
+    //   this.state = donation;
+    // }
   }
+
+  // findDonationByKey = (key) => {
+  //   return this.donationBundle.donations.find((d) => {
+  //     return d.key === key;
+  //   });
+  // }
 
   onAmountChange = (proxy, value) => {
     this.setState({
@@ -71,11 +74,15 @@ class DonationForm extends Component {
   }
 
   onAddClick = () => {
-    var bundle = store.get('donationBundle') || {
-      donations: []
-    };
-    bundle.donations.push(this.state);
-    store.set('donationBundle', bundle);
+    // var bundle = store.get('donationBundle') || {
+    //   donations: {}
+    // };
+    //
+    // // update in Set
+    // bundle.donations[this.state.key] = this.state;
+    //
+    // store.set('donationBundle', bundle);
+    this.bundle.saveDonation(this.state);
     browserHistory.push('/donate/list');
   }
 
@@ -87,7 +94,10 @@ class DonationForm extends Component {
 
     return (
       <div>
-        <div style={breadcrumbStyle}>
+        <div style={{
+          width: 800,
+          margin: '80px auto 0'
+        }}>
           <Link to="/donate/list">
             <FlatButton
               label="List all donations"

@@ -16,9 +16,12 @@ import FontIcon from 'material-ui/FontIcon';
 
 import StripeCheckout from 'react-stripe-checkout';
 
-import store from 'store';
+// import store from 'store';
+import DonationBundle from './DonationBundle';
 
 import './List.css';
+
+import _ from 'underscore';
 
 const paperStyle = {
   maxHeight: 800,
@@ -41,7 +44,10 @@ const iconButtonElement = (
 class DonationList extends Component {
   constructor(props, context) {
     super(props, context);
-    this.state = store.get('donationBundle') || {donations: []};
+
+    // this.state = store.get('donationBundle') || {donations: {}};
+    this.bundle = new DonationBundle();
+    this.state = this.bundle.get();
     this.onEdit = this.onEdit.bind(this);
   }
 
@@ -50,13 +56,19 @@ class DonationList extends Component {
   }
 
   onDelete = (donationId) => {
-    const dlist = this.state.donations.filter( d => {
-      return d.key !== donationId;
-    });
+    this.bundle.deleteDonation(donationId);
+    const b = this.bundle.get();
     this.setState({
-      donations: dlist
-    });
-    store.set('donationBundle', {donations: dlist});
+      donations: b.donations,
+      total: b.total
+    })
+    // const dlist = this.state.donations.filter( d => {
+    //   return d.key !== donationId;
+    // });
+    // this.setState({
+    //   donations: dlist
+    // });
+    // store.set('donationBundle', {donations: dlist});
   }
 
   onPaymentStarted = () => {
@@ -83,10 +95,11 @@ class DonationList extends Component {
   }
 
   getTotalAmount = () => {
-    return this.state
-      .donations.reduce(function(total, val){
-        return total + Number(val.amount);
-      }, 0);
+    return this.state.total || 0;
+    // return this.state
+    //   .donations.reduce(function(total, val){
+    //     return total + Number(val.amount);
+    //   }, 0);
   }
 
   onToken = (token) => {
@@ -114,8 +127,9 @@ class DonationList extends Component {
 
         // go to success page?
         alert("Paid!  Thank you!");
-        _this.setState({donations:[]});
-        store.remove('donationBundle');
+        _this.setState({donations:{}});
+        // store.remove('donationBundle');
+        this.bundle.clear();
 
         return response;
       })
@@ -125,9 +139,8 @@ class DonationList extends Component {
   }
 
   render() {
-    const rows = this.state.donations;
+    const rows = _.values(this.state.donations);
     const total = this.getTotalAmount();
-    const _this = this;
     const centeralign = {textAlign: 'center'};
     return (
       <div>
@@ -153,7 +166,7 @@ class DonationList extends Component {
                   primaryText="No Donations added yet.  Click Add Donation button to get started"
                 /> : ''
               }
-              {rows.map(function(d){
+              {rows.map( (d) => {
                 return <ListItem
                   key={d.key}
                   disabled={true}
@@ -161,8 +174,8 @@ class DonationList extends Component {
                     {d.studentName ? 'face' : 'school'}
                   </FontIcon>}
                   rightIconButton={<IconMenu iconButtonElement={iconButtonElement}>
-                    <MenuItem onTouchTap={function(){_this.onEdit(d.key)}}>Edit</MenuItem>
-                    <MenuItem onTouchTap={function(){_this.onDelete(d.key)}}>Delete</MenuItem>
+                    <MenuItem onTouchTap={this.onEdit.bind(this, d.key)}>Edit</MenuItem>
+                    <MenuItem onTouchTap={this.onDelete.bind(this, d.key)}>Delete</MenuItem>
                   </IconMenu>}
                   primaryText={'$'+d.amount+' for '+ (d.studentName || 'Olds Elementary')}
                   secondaryText={d.shoutOut}
