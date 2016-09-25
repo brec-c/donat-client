@@ -72,7 +72,6 @@ class DonationList extends Component {
   }
 
   onPaymentStarted = () => {
-    var _this = this;
     const request = new Request('/donations', {
       method: 'POST',
       body: JSON.stringify(this.state),
@@ -85,7 +84,7 @@ class DonationList extends Component {
         throw Error(response.statusText);
       }
       response.text().then(donationId => {
-          _this.setState({
+          this.setState({
             donationId: donationId
           });
       });
@@ -96,22 +95,16 @@ class DonationList extends Component {
 
   getTotalAmount = () => {
     return this.state.total || 0;
-    // return this.state
-    //   .donations.reduce(function(total, val){
-    //     return total + Number(val.amount);
-    //   }, 0);
   }
 
   onToken = (token) => {
-    const _this = this;
-
     const charge = {
       amount: this.getTotalAmount() * 100,
       donationId: this.state.donationId,
       stripeToken: token
     };
 
-    const request = new Request('/charge', {
+    const request = new Request('/charges', {
       method: 'POST',
       body: JSON.stringify(charge),
       headers: new Headers({
@@ -126,10 +119,15 @@ class DonationList extends Component {
         }
 
         // go to success page?
-        alert("Paid!  Thank you!");
-        _this.setState({donations:{}});
-        // store.remove('donationBundle');
+
+        this.setState({
+          donations:{},
+          total: 0
+        });
+
         this.bundle.clear();
+
+        alert("Paid!  Thank you!");
 
         return response;
       })
