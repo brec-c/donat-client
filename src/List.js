@@ -20,6 +20,7 @@ import StripeCheckout from 'react-stripe-checkout';
 import DonationBundle from './DonationBundle';
 
 import './List.css';
+import wolf from './images/wolf.png';
 
 import _ from 'underscore';
 
@@ -191,6 +192,7 @@ class DonationList extends Component {
           <StripeCheckout
             name="Fred A. Olds Elementary"
             description="Wolf Walkathon Fundraiser"
+            image={wolf}
             panelLabel="Pay"
             currency="USD"
             amount={total*100}
