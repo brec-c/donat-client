@@ -1,5 +1,6 @@
 import store from 'store';
 import uuid from 'uuid';
+import _ from 'underscore';
 
 const KEY = "donationBundle";
 
@@ -10,12 +11,11 @@ class DonationBundle {
   }
 
   save = (bundle) => {
-    // loop over donations and save total
-    const total = Object.keys(bundle.donations).reduce(
-      (previous, id) => {
-        const donation = bundle.donations[id];
+    const total = _.reduce(bundle.donations,
+      (previous, donation) => {
         return previous += Number(donation.amount);
       }, 0);
+
     bundle.total = total;
     store.set(KEY, bundle);
   }
