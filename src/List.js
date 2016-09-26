@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 
 import {Link, browserHistory} from 'react-router';
 
-import Paper                from 'material-ui/Paper';
-import RaisedButton         from 'material-ui/RaisedButton';
-import FlatButton           from 'material-ui/FlatButton';
+import Paper        from 'material-ui/Paper';
+import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton   from 'material-ui/FlatButton';
+import Divider      from 'material-ui/Divider';
 
 import {List, ListItem} from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
@@ -14,13 +15,15 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import FontIcon from 'material-ui/FontIcon';
 
+import SuccessDialog from './SuccessDialog';
+
 import StripeCheckout from 'react-stripe-checkout';
 
 // import store from 'store';
 import DonationBundle from './DonationBundle';
 
 import './List.css';
-import wolf from './images/wolf.png';
+import wolf from './images/cartoon-wolf.png';
 
 import _ from 'underscore';
 
@@ -46,7 +49,6 @@ class DonationList extends Component {
   constructor(props, context) {
     super(props, context);
 
-    // this.state = store.get('donationBundle') || {donations: {}};
     this.bundle = new DonationBundle();
     this.state = this.bundle.get();
     this.onEdit = this.onEdit.bind(this);
@@ -63,13 +65,6 @@ class DonationList extends Component {
       donations: b.donations,
       total: b.total
     })
-    // const dlist = this.state.donations.filter( d => {
-    //   return d.key !== donationId;
-    // });
-    // this.setState({
-    //   donations: dlist
-    // });
-    // store.set('donationBundle', {donations: dlist});
   }
 
   onPaymentStarted = () => {
@@ -119,8 +114,6 @@ class DonationList extends Component {
           throw Error(response.statusText);
         }
 
-        // go to success page?
-
         this.setState({
           donations:{},
           total: 0
@@ -128,7 +121,8 @@ class DonationList extends Component {
 
         this.bundle.clear();
 
-        alert("Paid!  Thank you!");
+        // alert("Paid!  Thank you!");
+        new SuccessDialog();
 
         return response;
       })
@@ -174,7 +168,7 @@ class DonationList extends Component {
                   </FontIcon>}
                   rightIconButton={<IconMenu iconButtonElement={iconButtonElement}>
                     <MenuItem onTouchTap={this.onEdit.bind(this, d.key)}>Edit</MenuItem>
-                    <MenuItem onTouchTap={this.onDelete.bind(this, d.key)}>Delete</MenuItem>
+                    <MenuItem onTouchTap={this.onDelete.bind(this, d.key)}>Remove</MenuItem>
                   </IconMenu>}
                   primaryText={'$'+d.amount+' for '+ (d.studentName || 'Olds Elementary')}
                   secondaryText={d.shoutOut}
@@ -182,6 +176,7 @@ class DonationList extends Component {
                 />;
               })}
             </List>
+            <Divider style={{marginBottom:'20px'}}/>
             <div className="total-summary">
               <span>Total:</span>&nbsp;<b>${total}</b>
             </div>
@@ -190,8 +185,8 @@ class DonationList extends Component {
         <div className="payNowFooter">
           { rows.length > 0 ?
           <StripeCheckout
-            name="Fred A. Olds Elementary"
-            description="Wolf Walkathon Fundraiser"
+            name="Wolf Walk-a-thon"
+            description="Fundraiser for Olds Elementary"
             image={wolf}
             panelLabel="Pay"
             currency="USD"

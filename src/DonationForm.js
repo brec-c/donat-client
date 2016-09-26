@@ -33,28 +33,7 @@ class DonationForm extends Component {
 
     this.bundle = new DonationBundle();
     this.state = this.bundle.getDonation(key) || this.bundle.createDonation();
-
-    // this.donationBundle = store.get('donationBundle') || { donations: {} };
-    //
-    // // if id is here, load the state from tht donation
-    // if (!key) {
-    //   this.state = {
-    //     amount: '',
-    //     studentName: '',
-    //     shoutOut: '',
-    //     key: uuid.v1()
-    //   };
-    // } else {
-    //   var donation = this.findDonationByKey(key);
-    //   this.state = donation;
-    // }
   }
-
-  // findDonationByKey = (key) => {
-  //   return this.donationBundle.donations.find((d) => {
-  //     return d.key === key;
-  //   });
-  // }
 
   onAmountChange = (proxy, value) => {
     this.setState({
@@ -74,14 +53,6 @@ class DonationForm extends Component {
   }
 
   onAddClick = () => {
-    // var bundle = store.get('donationBundle') || {
-    //   donations: {}
-    // };
-    //
-    // // update in Set
-    // bundle.donations[this.state.key] = this.state;
-    //
-    // store.set('donationBundle', bundle);
     this.bundle.saveDonation(this.state);
     browserHistory.push('/donate/list');
   }
@@ -89,7 +60,6 @@ class DonationForm extends Component {
   render() {
     const isDisabled = !this.state.amount || Number(this.state.amount) === 0;
     const centeralign = {textAlign: 'center'};
-
     const amount = this.state.amount; // TODO: process this into $xxx.xx
 
     return (

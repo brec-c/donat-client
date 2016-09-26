@@ -7,9 +7,6 @@ import App from './App';
 import DonationList from './List';
 import DonationForm from './DonationForm';
 
-// TODO:
-// - add success route
-
 import './index.css';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -33,10 +30,10 @@ const muiTheme = getMuiTheme({
 ReactDOM.render(
   <MuiThemeProvider muiTheme={muiTheme}>
     <Router history={browserHistory}>
-      <Route path='/donate'    component={App}>
-        <IndexRoute            component={DonationList} />
-        <Route path='list'     component={DonationList} />
-        <Route path='add'      component={DonationForm} />
+      <Route path='/donate'     component={App}>
+        <IndexRoute             component={DonationList} />
+        <Route path='list'      component={DonationList} />
+        <Route path='add'       component={DonationForm} />
         <Route path='edit/:key' component={DonationForm} />
       </Route>
     </Router>
