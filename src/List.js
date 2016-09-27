@@ -70,7 +70,7 @@ class DonationList extends Component {
   onPaymentStarted = () => {
     const request = new Request('/donations', {
       method: 'POST',
-      body: JSON.stringify(this.state),
+      body: JSON.stringify(this.bundle.get()),
       headers: new Headers({
         'Content-Type': 'application/json'
       })
@@ -121,14 +121,21 @@ class DonationList extends Component {
 
         this.bundle.clear();
 
-        // alert("Paid!  Thank you!");
-        new SuccessDialog();
+        this.setState({
+          successOpen: true
+        });
 
         return response;
       })
       .catch(err => {
           console.error(err);
       })
+  }
+
+  onSuccessClosed = () => {
+    this.setState({
+      successOpen: false
+    });
   }
 
   render() {
@@ -186,7 +193,7 @@ class DonationList extends Component {
           { rows.length > 0 ?
           <StripeCheckout
             name="Wolf Walk-a-thon"
-            description="Fundraiser for Olds Elementary"
+            description="Fundraiser for Fred Olds PTA"
             image={wolf}
             panelLabel="Pay"
             currency="USD"
@@ -203,6 +210,10 @@ class DonationList extends Component {
           </StripeCheckout>
           : null }
         </div>
+        <SuccessDialog
+          successOpen={this.state.successOpen || false}
+          onClose={this.onSuccessClosed.bind(this)}
+        />
       </div>
     );
   }
