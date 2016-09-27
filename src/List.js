@@ -199,7 +199,7 @@ class DonationList extends Component {
             currency="USD"
             amount={total*100}
             token={this.onToken}
-            stripeKey="pk_test_LfX4pdpuTU5cBcy35taA7f0D"
+            stripeKey={process.env.REACT_APP_STRIPE_KEY}
             triggerEvent="onTouchTap"
           >
             <RaisedButton
