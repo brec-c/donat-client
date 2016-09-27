@@ -20,7 +20,7 @@
   },
   "scripts": {
     "start": "export REACT_APP_STRIPE_KEY=pk_test_LfX4pdpuTU5cBcy35taA7f0D && react-scripts start",
-    "build": "react-scripts build && rm -rf ../donat/public/donate && mkdir ../donat/public/donate && cp -r ./build/* ../donat/public/donate",
+    "build": "export REACT_APP_STRIPE_KEY=pk_live_CIkAAiVvTkqtoJqLuFGNQMQi && react-scripts build && rm -rf ../donat/public/donate && mkdir ../donat/public/donate && cp -r ./build/* ../donat/public/donate",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
