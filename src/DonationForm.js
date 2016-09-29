@@ -99,7 +99,7 @@ class DonationForm extends Component {
             <br/>
             <TextField
               hintText="What do you want to be shouted during the run?"
-              floatingLabelText="Shout out (optional)"
+              floatingLabelText="Shout out (optional for donations $100 or greater)"
               type="text"
               multiLine={true}
               rows={2}
